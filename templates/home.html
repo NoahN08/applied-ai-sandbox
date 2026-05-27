@@ -11,6 +11,9 @@
     .note h3 { margin: 0 0 0.5rem; }
     a.btn { display: inline-block; background: #1a2540; color: #fff; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; }
     .tag { display: inline-block; background: #e8eaf6; color: #1a2540; border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.78rem; margin-left: 0.3rem; }
+    .filters { margin: 1rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .filters a { padding: 0.25rem 0.75rem; border-radius: 999px; border: 1px solid #ccc; text-decoration: none; color: #333; font-size: 0.85rem; }
+    .filters a.active { background: #1a2540; color: #fff; border-color: #1a2540; }
   </style>
 </head>
 <body>
@@ -18,6 +21,15 @@
   <p class="meta">A tiny note-taking app. Practice ground for the Applied AI cohort.</p>
 
   <a class="btn" href="{{ url_for('new_note') }}">+ New note</a>
+
+  {% if all_tags %}
+  <div class="filters">
+    <a href="{{ url_for('home') }}" {% if not active_tag %}class="active"{% endif %}>All</a>
+    {% for tag in all_tags %}
+      <a href="{{ url_for('home', tag=tag) }}" {% if active_tag == tag %}class="active"{% endif %}>{{ tag }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   <h2 style="margin-top: 2rem;">Your notes ({{ notes|length }})</h2>
   {% if notes %}

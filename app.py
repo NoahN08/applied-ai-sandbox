@@ -18,7 +18,13 @@ def create_app() -> Flask:
 
     @app.route("/")
     def home():
-        return render_template("home.html", notes=app.notes)
+        tag_filter = request.args.get("tag", "")
+        if tag_filter:
+            filtered = [n for n in app.notes if tag_filter in n.get("tags", [])]
+        else:
+            filtered = app.notes
+        all_tags = sorted({t for n in app.notes for t in n.get("tags", [])})
+        return render_template("home.html", notes=filtered, all_tags=all_tags, active_tag=tag_filter)
 
     @app.route("/notes/new", methods=["GET", "POST"])
     def new_note():
