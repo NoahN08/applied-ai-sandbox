@@ -10,6 +10,7 @@
     .note { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
     .note h3 { margin: 0 0 0.5rem; }
     a.btn { display: inline-block; background: #1a2540; color: #fff; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; }
+    .tag { display: inline-block; background: #e8eaf6; color: #1a2540; border-radius: 4px; padding: 0.1rem 0.45rem; font-size: 0.78rem; margin-left: 0.3rem; }
   </style>
 </head>
 <body>
@@ -22,7 +23,7 @@
   {% if notes %}
     {% for note in notes %}
       <div class="note">
-        <h3>{{ note.title }}</h3>
+        <h3>{{ note.title }}{% for tag in note.get('tags', []) %}<span class="tag">{{ tag }}</span>{% endfor %}</h3>
         <p>{{ note.body }}</p>
       </div>
     {% endfor %}
