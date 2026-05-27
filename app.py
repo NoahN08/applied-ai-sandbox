@@ -30,9 +30,9 @@ def create_app() -> Flask:
                 errors.append("Title is required")
             if not body:
                 errors.append("Body is required")
-            if errors:
-                return render_template("new_note.html", title=title, body=body, errors=errors)
             raw_tags = request.form.get("tags", "")
+            if errors:
+                return render_template("new_note.html", title=title, body=body, tags_value=raw_tags, errors=errors)
             tags = [t.strip() for t in raw_tags.split(",") if t.strip()]
             app.notes.append({"title": title, "body": body, "tags": tags})
             return redirect(url_for("home"))
