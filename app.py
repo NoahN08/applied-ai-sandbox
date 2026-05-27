@@ -18,16 +18,17 @@ def create_app() -> Flask:
 
     @app.route("/")
     def home():
-        q = request.args.get("q", "").strip()
-        if q:
-            ql = q.lower()
-            notes = [n for n in app.notes if ql in n["title"].lower() or ql in n["body"].lower()]
+        query = request.args.get("q", "").strip()
+        if query:
+            query_lower = query.lower()
+            notes = [n for n in app.notes if query_lower in n["title"].lower() or query_lower in n["body"].lower()]
         else:
             notes = app.notes
-        return render_template("home.html", notes=notes, q=q)
+        return render_template("home.html", notes=notes, q=query)
 
     @app.route("/notes/new", methods=["GET", "POST"])
     def new_note():
+        """Render the new-note form (GET) or validate and save a note (POST)."""
         if request.method == "POST":
             title = (request.form.get("title") or "").strip()
             body = (request.form.get("body") or "").strip()
