@@ -18,14 +18,26 @@ def create_app() -> Flask:
 
     @app.route("/")
     def home():
-        return render_template("home.html", notes=app.notes)
+        q = request.args.get("q", "").strip()
+        if q:
+            ql = q.lower()
+            notes = [n for n in app.notes if ql in n["title"].lower() or ql in n["body"].lower()]
+        else:
+            notes = app.notes
+        return render_template("home.html", notes=notes, q=q)
 
     @app.route("/notes/new", methods=["GET", "POST"])
     def new_note():
         if request.method == "POST":
             title = (request.form.get("title") or "").strip()
             body = (request.form.get("body") or "").strip()
-            # TASK 01 will add validation here.
+            errors = []
+            if not title:
+                errors.append("Title is required")
+            if not body:
+                errors.append("Body is required")
+            if errors:
+                return render_template("new_note.html", title=title, body=body, errors=errors)
             app.notes.append({"title": title, "body": body})
             return redirect(url_for("home"))
         return render_template("new_note.html")

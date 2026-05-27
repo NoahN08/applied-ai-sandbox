@@ -10,6 +10,9 @@
     .note { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
     .note h3 { margin: 0 0 0.5rem; }
     a.btn { display: inline-block; background: #1a2540; color: #fff; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; }
+    .search-bar { display: flex; gap: 0.5rem; margin: 1rem 0; }
+    .search-bar input { flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ccc; border-radius: 6px; font: inherit; }
+    .search-bar button { background: #1a2540; color: #fff; border: none; border-radius: 6px; padding: 0.4rem 1rem; cursor: pointer; font: inherit; }
   </style>
 </head>
 <body>
@@ -18,7 +21,12 @@
 
   <a class="btn" href="{{ url_for('new_note') }}">+ New note</a>
 
-  <h2 style="margin-top: 2rem;">Your notes ({{ notes|length }})</h2>
+  <form class="search-bar" method="GET" action="{{ url_for('home') }}">
+    <input type="search" name="q" value="{{ q or '' }}" placeholder="Search notes…">
+    <button type="submit">Search</button>
+  </form>
+
+  <h2 style="margin-top: 1rem;">Your notes ({{ notes|length }})</h2>
   {% if notes %}
     {% for note in notes %}
       <div class="note">
@@ -27,7 +35,7 @@
       </div>
     {% endfor %}
   {% else %}
-    <p>No notes yet.</p>
+    {% if q %}<p>No notes match your search.</p>{% else %}<p>No notes yet.</p>{% endif %}
   {% endif %}
 </body>
 </html>
